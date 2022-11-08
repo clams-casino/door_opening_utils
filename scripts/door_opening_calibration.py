@@ -19,8 +19,8 @@ def lookupLatestTransform(listener, target_frame, source_frame):
 
 
 def generateTransformStampedMsg(trans, quat, target_frame, source_frame):
+    # Set the header timestamp right before broadcasting
     transformStamped = geometry_msgs.msg.TransformStamped()
-    transformStamped.header.stamp = rospy.Time.now()
     transformStamped.header.frame_id = target_frame
     transformStamped.child_frame_id = source_frame
 
@@ -83,6 +83,8 @@ if __name__ == "__main__":
 
     rate = rospy.Rate(10.0)
     while not rospy.is_shutdown():
+        door_base_to_cam_transform_stamped.header.stamp = rospy.Time.now()
+        camera_to_odom_transform_stamped.header.stamp = rospy.Time.now()
         static_tf_broadcaster.sendTransform(door_base_to_cam_transform_stamped)
         static_tf_broadcaster.sendTransform(camera_to_odom_transform_stamped)
         rate.sleep()
