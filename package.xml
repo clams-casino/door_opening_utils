@@ -51,6 +51,8 @@
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
 
+  <exec_depend>usb_cam</exec_depend>
+  <exec_depend>image_undistort</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
