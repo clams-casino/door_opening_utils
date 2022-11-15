@@ -1,8 +1,11 @@
 <launch>
+  <arg name="width" default="640" />
+  <arg name="height" default="360" />
+
   <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
     <param name="video_device" value="/dev/video2" />
-    <param name="image_width" value="640" />
-    <param name="image_height" value="360" />
+    <param name="image_width" value="$(arg width)" />
+    <param name="image_height" value="$(arg height)" />
     <param name="pixel_format" value="uyvy" />  <!-- this is important -->
     <param name="color_format" value="yuv422p" />
     <param name="camera_frame_id" value="usb_cam" />
@@ -15,7 +18,7 @@
     <param name="input_camera_info_from_ros_params" value = "true"/>    
     <param name="scale" value="1.0"/>
     <param name="output_camera_info_source" value="match_input"/>
-    <rosparam file="$(find door_opening_utils)/config/usb_cam_calib_640x360.yaml"/>
+    <rosparam file="$(find door_opening_utils)/config/usb_cam_calib_$(arg width)x$(arg height).yaml"/>
     <remap from="input/image" to="usb_cam/image_raw"/>
     <remap from="output/image" to="usb_cam/undistorted/image" />
     <remap from="output/camera_info" to="usb_cam/undistorted/camera_info" />
