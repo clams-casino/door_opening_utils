@@ -42,16 +42,16 @@ if __name__ == "__main__":
 
 
     """ TF from door base to camera frame """
-    door_base_to_cam_trans, door_base_to_cam_quat = lookupLatestTransform(tf_listener, "camera_link", "door_base")
+    door_base_to_cam_trans, door_base_to_cam_quat = lookupLatestTransform(tf_listener, "usb_cam", "door_base")
 
     print("\n\n")
-    print("{:.3f} {:.3f} {:.3f} {:.3f} {:.3f} {:.3f} {:.3f} camera_link door_base 10\n\n".format(
+    print("{:.3f} {:.3f} {:.3f} {:.3f} {:.3f} {:.3f} {:.3f} usb_cam door_base 10\n\n".format(
         door_base_to_cam_trans[0], door_base_to_cam_trans[1], door_base_to_cam_trans[2],
         door_base_to_cam_quat[0], door_base_to_cam_quat[1], door_base_to_cam_quat[2], door_base_to_cam_quat[3]))
 
 
     """ TF from camera to the odom frame """
-    cam_to_tag_trans, cam_to_tag_quat = lookupLatestTransform(tf_listener, "tag_0_test", "camera_link")
+    cam_to_tag_trans, cam_to_tag_quat = lookupLatestTransform(tf_listener, "tag_0_test", "usb_cam")
     camera_to_tag = quaternion_matrix(cam_to_tag_quat)
     camera_to_tag[:3, 3] = cam_to_tag_trans
 
@@ -64,7 +64,7 @@ if __name__ == "__main__":
     camera_to_odom_trans = camera_to_odom[:3, 3]
 
     print("\n\n")
-    print("{:.3f} {:.3f} {:.3f} {:.3f} {:.3f} {:.3f} {:.3f} odom camera_link 10\n\n".format(
+    print("{:.3f} {:.3f} {:.3f} {:.3f} {:.3f} {:.3f} {:.3f} odom usb_cam 10\n\n".format(
         camera_to_odom_trans[0], camera_to_odom_trans[1], camera_to_odom_trans[2],
         camera_to_odom_quat[0], camera_to_odom_quat[1], camera_to_odom_quat[2], camera_to_odom_quat[3]))
 
@@ -75,11 +75,11 @@ if __name__ == "__main__":
 
     door_base_to_cam_transform_stamped = generateTransformStampedMsg(
         door_base_to_cam_trans, door_base_to_cam_quat,
-        "camera_link", "door_base")
+        "usb_cam", "door_base")
 
     camera_to_odom_transform_stamped = generateTransformStampedMsg(
         camera_to_odom_trans, camera_to_odom_quat,
-        "odom", "camera_link")
+        "odom", "usb_cam")
 
     rate = rospy.Rate(10.0)
     while not rospy.is_shutdown():
