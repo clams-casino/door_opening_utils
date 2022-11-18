@@ -1,0 +1,10 @@
+<launch>
+  <arg name="device" default="/dev/video2" />
+
+  <include file="$(find door_opening_utils)/launch/usb_cam.launch"> <!-- Do calibration procedure at a higher resolution -->
+    <arg name="device" value="$(arg device)" />
+    <arg name="width" default="1280" />
+    <arg name="height" default="720" />
+  </include>
+
+</launch>
