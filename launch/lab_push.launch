@@ -1,0 +1,22 @@
+<launch>
+    <arg name="is_calib" default="false" />
+
+    <group if="$(arg is_calib)">
+        <include file="$(find door_opening_utils)/launch/calibration.launch">
+            <arg name="door_name" value="lab_push" />
+        </include>
+
+        <node pkg="tf" type="static_transform_publisher" name="measure_doorway_center" args="0 -1.85 0 -3.1416 0 1.5708 tag_door_panel_center door_base 1" />
+    </group>
+
+    <group unless="$(arg is_calib)">
+        <include file="$(find door_opening_utils)/launch/run_experiment.launch">
+            <arg name="door_name" value="lab_push" />
+        </include>
+    </group>
+
+    
+    <node pkg="tf" type="static_transform_publisher" name="measure_door_handle" args="0.380, -0.834, 0.075 0 0 0 tag_door_panel_center door_handle 1" />
+    <!-- <node pkg="tf" type="static_transform_publisher" name="measure_door_handle" args="0.360, -0.834, 0.075 0 0 0 tag_door_panel_center door_handle 1" /> -->
+
+</launch>
