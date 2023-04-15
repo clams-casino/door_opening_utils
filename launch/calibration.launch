@@ -1,11 +1,11 @@
 <launch>
 
-<arg name="device" default="/dev/video4" />
+    <arg name="device" default="/dev/video4" />
 
-<include file="$(find door_opening_utils)/launch/usb_cam_calibration.launch">
-    <arg name="device" value="$(arg device)" />
-</include>
+    <include file="$(find door_opening_utils)/launch/usb_cam_calibration.launch">
+        <arg name="device" value="$(arg device)" />
+    </include>
 
-<include file="$(find apriltag_ros)/launch/calibration.launch" />
+    <include file="$(find apriltag_ros)/launch/calibration.launch" />
 
 </launch>
