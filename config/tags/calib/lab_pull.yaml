@@ -1,0 +1,7 @@
+standalone_tags:
+  [
+      {id: 201, size: 0.224, name: tag_0_test},
+      {id: 501, size: 0.224, name: tag_door_panel_center},
+
+      {id: 2, size: 0.166, name: tag_handle},
+  ]

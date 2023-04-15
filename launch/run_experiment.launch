@@ -1,11 +1,14 @@
 <launch>
 
+    <arg name="door_name" />
     <arg name="device" default="/dev/video4" />
-
+    
     <include file="$(find door_opening_utils)/launch/usb_cam.launch">
         <arg name="device" value="$(arg device)" />
     </include>
 
-    <include file="$(find apriltag_ros)/launch/run_experiment.launch" />
+    <include file="$(find apriltag_ros)/launch/run_experiment.launch" >
+        <arg name="tags_path" value="$(find door_opening_utils)/config/tags/run/$(arg door_name).yaml" />
+    </include>
 
 </launch>
