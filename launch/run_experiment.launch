@@ -1,14 +1,14 @@
 <launch>
 
-<arg name="device" default="/dev/video4" />
+    <arg name="door_name" />
+    <arg name="device" default="/dev/video4" />
+    
+    <include file="$(find door_opening_utils)/launch/usb_cam.launch">
+        <arg name="device" value="$(arg device)" />
+    </include>
 
-<include file="$(find door_opening_utils)/launch/usb_cam.launch">
-    <arg name="device" value="$(arg device)" />
-</include>
-
-<include file="$(find apriltag_ros)/launch/run_experiment.launch" />
-
-<node name="arm_joint_vel_plot" pkg="rqt_multiplot" type="rqt_multiplot" args="--multiplot-config $(find door_opening_utils)/rqt_multiplot/arm_joint_velocities.xml" />
-<node name="arm_command_plot" pkg="rqt_multiplot" type="rqt_multiplot" args="--multiplot-config $(find door_opening_utils)/rqt_multiplot/arm_commanded_position.xml" />
+    <include file="$(find apriltag_ros)/launch/run_experiment.launch" >
+        <arg name="tags_path" value="$(find door_opening_utils)/config/tags/run/$(arg door_name).yaml" />
+    </include>
 
 </launch>
