@@ -6,6 +6,8 @@ from tf.transformations import quaternion_matrix, quaternion_from_matrix
 import tf2_ros
 import geometry_msgs.msg
 
+ODOM_FRAME_NAME = "odom"
+CAMERA_FRAME_NAME = "usb_cam"
 
 def lookupLatestTransform(listener, target_frame, source_frame):
     try:
@@ -42,20 +44,22 @@ if __name__ == "__main__":
 
 
     """ TF from door base to camera frame """
-    door_base_to_cam_trans, door_base_to_cam_quat = lookupLatestTransform(tf_listener, "usb_cam", "door_base")
+    door_base_to_cam_trans, door_base_to_cam_quat = lookupLatestTransform(tf_listener, CAMERA_FRAME_NAME, "door_base")
 
     print("\n\n")
-    print("{:.3f} {:.3f} {:.3f} {:.3f} {:.3f} {:.3f} {:.3f} usb_cam door_base 10\n\n".format(
+    print("{:.3f} {:.3f} {:.3f} {:.3f} {:.3f} {:.3f} {:.3f} {} door_base 10\n\n".format(
         door_base_to_cam_trans[0], door_base_to_cam_trans[1], door_base_to_cam_trans[2],
-        door_base_to_cam_quat[0], door_base_to_cam_quat[1], door_base_to_cam_quat[2], door_base_to_cam_quat[3]))
+        door_base_to_cam_quat[0], door_base_to_cam_quat[1], door_base_to_cam_quat[2], door_base_to_cam_quat[3],
+        CAMERA_FRAME_NAME)
+    )
 
 
     """ TF from camera to the odom frame """
-    cam_to_tag_trans, cam_to_tag_quat = lookupLatestTransform(tf_listener, "tag_0_test", "usb_cam")
+    cam_to_tag_trans, cam_to_tag_quat = lookupLatestTransform(tf_listener, "tag_0_test", CAMERA_FRAME_NAME)
     camera_to_tag = quaternion_matrix(cam_to_tag_quat)
     camera_to_tag[:3, 3] = cam_to_tag_trans
 
-    tag_to_odom_trans, tag_to_odom_quat = lookupLatestTransform(tf_listener, "odom", "robot_tag_0_test")
+    tag_to_odom_trans, tag_to_odom_quat = lookupLatestTransform(tf_listener, ODOM_FRAME_NAME, "robot_tag_0_test")
     tag_to_odom = quaternion_matrix(tag_to_odom_quat)
     tag_to_odom[:3, 3] = tag_to_odom_trans
 
@@ -64,9 +68,11 @@ if __name__ == "__main__":
     camera_to_odom_trans = camera_to_odom[:3, 3]
 
     print("\n\n")
-    print("{:.3f} {:.3f} {:.3f} {:.3f} {:.3f} {:.3f} {:.3f} odom usb_cam 10\n\n".format(
+    print("{:.3f} {:.3f} {:.3f} {:.3f} {:.3f} {:.3f} {:.3f} {} {} 10\n\n".format(
         camera_to_odom_trans[0], camera_to_odom_trans[1], camera_to_odom_trans[2],
-        camera_to_odom_quat[0], camera_to_odom_quat[1], camera_to_odom_quat[2], camera_to_odom_quat[3]))
+        camera_to_odom_quat[0], camera_to_odom_quat[1], camera_to_odom_quat[2], camera_to_odom_quat[3],
+        ODOM_FRAME_NAME, CAMERA_FRAME_NAME)
+    )
 
 
     """ Publish these static transforms """
@@ -75,11 +81,11 @@ if __name__ == "__main__":
 
     door_base_to_cam_transform_stamped = generateTransformStampedMsg(
         door_base_to_cam_trans, door_base_to_cam_quat,
-        "usb_cam", "door_base")
+        CAMERA_FRAME_NAME, "door_base")
 
     camera_to_odom_transform_stamped = generateTransformStampedMsg(
         camera_to_odom_trans, camera_to_odom_quat,
-        "odom", "usb_cam")
+        ODOM_FRAME_NAME, CAMERA_FRAME_NAME)
 
     rate = rospy.Rate(10.0)
     while not rospy.is_shutdown():
