@@ -1,6 +1,6 @@
 <launch>
     <arg name="is_calib" default="false" />
-    <arg name="device" default="/dev/video4" />
+    <arg name="device" default="/dev/video2" />
 
     <group if="$(arg is_calib)">
         <include file="$(find door_opening_utils)/launch/calibration.launch">
@@ -19,7 +19,12 @@
     </group>
 
     
-    <node pkg="tf" type="static_transform_publisher" name="measure_door_handle" args="-0.403 -0.836 0.0765 0 0 0 tag_door_panel_center door_handle 1" />
+    <node pkg="tf" type="static_transform_publisher" name="measure_door_handle" args="-0.407 -0.820 0.0765 0 0 0 tag_door_panel_center door_handle 1" />
+
+    <!-- fake handle location -->
+    <!-- <node pkg="tf" type="static_transform_publisher" name="measure_door_handle" args="-0.413 -0.820 0.2765 0 0 0 tag_door_panel_center door_handle 1" /> -->
+
+    <!-- <node pkg="tf" type="static_transform_publisher" name="measure_door_handle" args="-0.403 -0.806 0.0765 0 0 0 tag_door_panel_center door_handle 1" /> -->
     <!-- <node pkg="tf" type="static_transform_publisher" name="measure_door_handle" args="-0.433 -0.831 0.075 0 0 0 tag_door_panel_center door_handle 1" /> tuning for opening -->
 
 </launch>
