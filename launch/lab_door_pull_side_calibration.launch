@@ -1,0 +1,42 @@
+<!--
+This launch file assumes that we'll use the lab door but only do the calibration on the pull side.
+-->
+
+<launch>
+    <arg name="is_pull" default="true" />
+    <arg name="is_calib" default="false" />
+    <arg name="device" default="/dev/video2" />
+
+    <group if="$(arg is_calib)">
+        <include file="$(find door_opening_utils)/launch/calibration.launch">
+            <arg name="door_name" value="lab_pull" />
+            <arg name="device" value="$(arg device)" />
+        </include>
+
+        <group if="$(arg is_pull)">
+            <node pkg="tf" type="static_transform_publisher" name="measure_doorway_center" args="0 -1.85 0 -3.1416 0 1.5708 tag_door_panel_center door_base 1" />
+        </group>
+
+        <group unless="$(arg is_pull)">
+            <node pkg="tf" type="static_transform_publisher" name="measure_doorway_center" args="0 -1.85 -0.04 -3.1416 3.1416 1.5708 tag_door_panel_center door_base 1" />
+        </group>
+
+    </group>
+
+    <group unless="$(arg is_calib)">
+        <include file="$(find door_opening_utils)/launch/run_experiment.launch">
+            <arg name="door_name" value="lab_pull" />
+            <arg name="device" value="$(arg device)" />
+        </include>
+    </group>
+
+
+    <group if="$(arg is_pull)">
+        <node pkg="tf" type="static_transform_publisher" name="measure_door_handle" args="-0.407 -0.815 0.0765 0 0 0 tag_door_panel_center door_handle 1" />
+    </group>
+
+    <group unless="$(arg is_pull)">
+        <node pkg="tf" type="static_transform_publisher" name="measure_door_handle" args="-0.407 -0.815 -0.0535 0 3.1416 0 tag_door_panel_center door_handle 1" />
+    </group>
+
+</launch>
